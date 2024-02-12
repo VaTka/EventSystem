@@ -16,9 +16,9 @@ export class EventSystem {
   }
 
   // Remove event listener
-  off(eventName: string, callback: Callback) {
+  off(eventName: string) {
     if (this.events[eventName]) {
-      this.events[eventName] = this.events[eventName].filter(cb => cb !== callback);
+      delete this.events[eventName]
     }
   }
 
