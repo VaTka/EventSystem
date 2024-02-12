@@ -15,5 +15,5 @@ eventSystem.on('exampleEvent', eventHandler);
 eventSystem.emit('exampleEvent', { message: 'Hello, world!' });
 
 // Remove event listener
-eventSystem.off('exampleEvent', eventHandler);
+eventSystem.off('exampleEvent');
 ```
