@@ -1,32 +1,31 @@
 type Callback = (data: any) => void;
 
 export class EventSystem {
-  private events: { [eventName: string]: Callback[] };
+  private events: Map<string, Callback[]>;
 
   constructor() {
-    this.events = {};
+    this.events = new Map();
   }
 
   // Add event listener
   on(eventName: string, callback: Callback) {
-    if (!this.events[eventName]) {
-      this.events[eventName] = [];
+    if (!this.events.has(eventName)) {
+      this.events.set(eventName, []);
     }
-    this.events[eventName].push(callback);
+    this.events.get(eventName)?.push(callback);
   }
 
   // Remove event listener
   off(eventName: string) {
-    if (this.events[eventName]) {
-      delete this.events[eventName]
-    }
+    this.events.delete(eventName)
   }
 
   // Trigger event
   emit(eventName: string, data?: any) {
     if (!data) data = {}
-    if (this.events[eventName]) {
-      this.events[eventName].forEach(callback => {
+    const listeners = this.events.get(eventName);
+    if (listeners) {
+      listeners.slice().forEach(callback => {
         callback(data);
       });
     }
