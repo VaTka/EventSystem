@@ -35,7 +35,8 @@ off(eventName: string, id: number) {
 }
 
 // Trigger event
-emit(eventName: string, data: any) {
+emit(eventName: string, data?: any) {
+  if (!data) data = {}
   const listeners = this.events.get(eventName);
   if (listeners) {
     listeners.forEach(listener => {
