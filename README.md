@@ -9,11 +9,11 @@ const eventSystem = new EventSystem();
 function eventHandler(data: any) {
   console.log("Event occurred with data:", data);
 }
-eventSystem.on('exampleEvent', eventHandler);
+eventSystem.on('exampleEvent', eventHandler); // eventName: string, callback: Callback
 
 // Trigger event
-eventSystem.emit('exampleEvent', { message: 'Hello, world!' });
+eventSystem.emit('exampleEvent', { message: 'Hello, world!' }); // eventName: string, data?: any
 
 // Remove event listener
-eventSystem.off('exampleEvent');
+eventSystem.off('exampleEvent', 1); // eventName: string, id: number
 ```
