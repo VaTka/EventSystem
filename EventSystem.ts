@@ -1,4 +1,8 @@
 type Callback = (data: any) => void;
+type EventName =
+  'ONCLICK' |
+  'CUSTOMEVENT'
+// Add new types as need
 
 export class EventSystem {
   private events: Map<string, Map<number, Callback>[]>;
@@ -9,8 +13,14 @@ export class EventSystem {
     this.idCounter = 0;
   }
 
-  // Add event listener
-  on(eventName: string, callback: Callback): number {
+  /**
+   * Adds an event listener for the specified event.
+   * @param {EventName} eventName - The name of the event.
+   * @param {Callback} callback - The callback function to be executed when the event is triggered.
+   * @returns {number} The ID of the added event listener.
+   */
+  
+  on(eventName: EventName, callback: Callback): number {
     if (!this.events.has(eventName)) {
       this.events.set(eventName, []);
     }
@@ -20,30 +30,40 @@ export class EventSystem {
     return id;
   }
 
-// Remove event listener
-off(eventName: string, id: number) {
-  const listeners = this.events.get(eventName);
-  if (listeners) {
-    const index = listeners.findIndex(listener => listener.has(id));
-    if (index !== -1) {
-      listeners.splice(index, 1);
-      if (listeners.length === 0) {
-        this.events.delete(eventName);
+  /**
+   * Removes an event listener for the specified event.
+   * @param {EventName} eventName - The name of the event.
+   * @param {number} id - The ID of the event listener to be removed.
+   */
+
+  off(eventName: EventName, id: number) {
+    const listeners = this.events.get(eventName);
+    if (listeners) {
+      const index = listeners.findIndex(listener => listener.has(id));
+      if (index !== -1) {
+        listeners.splice(index, 1);
+        if (listeners.length === 0) {
+          this.events.delete(eventName);
+        }
       }
     }
   }
-}
 
-// Trigger event
-emit(eventName: string, data?: any) {
-  if (!data) data = {}
-  const listeners = this.events.get(eventName);
-  if (listeners) {
-    listeners.forEach(listener => {
-      listener.forEach(callback => {
-        callback(data);
+  /**
+   * Triggers the specified event.
+   * @param {EventName} eventName - The name of the event to be triggered.
+   * @param {*} [data] - Optional data to be passed to the event listeners.
+   */
+
+  emit(eventName: EventName, data?: any) {
+    if (!data) data = {}
+    const listeners = this.events.get(eventName);
+    if (listeners) {
+      listeners.forEach(listener => {
+        listener.forEach(callback => {
+          callback(data);
+        });
       });
-    });
+    }
   }
-}
 }
